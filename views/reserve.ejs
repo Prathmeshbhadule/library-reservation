@@ -1,0 +1,27 @@
+<%- include('partials/header', { title: 'Reserve a book' }) %>
+<% const n = Object.keys(errors).length; const fields = [
+  { name: 'name', label: 'Full name', type: 'text' }, { name: 'studentId', label: 'Student ID', type: 'text', ph: '23CS1045' },
+  { name: 'email', label: 'Email', type: 'text' }, { name: 'phone', label: 'Mobile number', type: 'text' },
+  { name: 'pickupDate', label: 'Pickup date (within 7 days, not Sunday)', type: 'date' }, { name: 'days', label: 'Borrow for (days, 1-14)', type: 'number' } ]; %>
+<form class="card" method="POST" action="/reserve" novalidate>
+  <% if (n) { %><div class="alert err-box" role="alert"><b><%= n %> problem<%= n > 1 ? 's' : '' %> found.</b> The server rejected your reservation. Fix the highlighted fields and try again.</div><% } %>
+  <div class="row">
+  <% fields.forEach(f => { const e = errors[f.name]; %>
+    <div class="f<%= e ? ' bad' : '' %>"><label for="<%= f.name %>"><%= f.label %></label>
+      <input id="<%= f.name %>" name="<%= f.name %>" type="<%= f.type %>" value="<%= values[f.name] ?? '' %>" placeholder="<%= f.ph || '' %>"
+        <% if (f.type === 'date') { %>min="<%= min %>" max="<%= max %>"<% } %> <%= e ? 'aria-invalid=true' : '' %>>
+      <% if (e) { %><div class="err" role="alert"><%= e.msg %></div><% } %></div>
+  <% }) %>
+  </div>
+  <div class="f<%= errors.bookId ? ' bad' : '' %>"><label for="bookId">Book</label>
+    <select id="bookId" name="bookId"><option value="">Select a book</option>
+      <% books.forEach(b => { %><option value="<%= b.id %>" <%= String(values.bookId) === String(b.id) ? 'selected' : '' %>><%= b.title %> – <%= b.available %> available</option><% }) %></select>
+    <% if (errors.bookId) { %><div class="err" role="alert"><%= errors.bookId.msg %></div><% } %></div>
+  <div class="f<%= errors.notes ? ' bad' : '' %>"><label for="notes">Notes (optional)</label>
+    <textarea id="notes" name="notes" rows="3"><%= values.notes ?? '' %></textarea>
+    <% if (errors.notes) { %><div class="err" role="alert"><%= errors.notes.msg %></div><% } %></div>
+  <div class="f<%= errors.terms ? ' bad' : '' %>"><label class="chk"><input type="checkbox" name="terms" <%= (values.terms === 'on') ? 'checked' : '' %>> I accept the library rules (return on time, handle books with care).</label>
+    <% if (errors.terms) { %><div class="err" role="alert"><%= errors.terms.msg %></div><% } %></div>
+  <button class="btn" type="submit">Reserve book</button>
+</form>
+<%- include('partials/footer') %>

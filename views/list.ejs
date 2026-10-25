@@ -1,0 +1,9 @@
+<%- include('partials/header', { title: 'Reservations' }) %>
+<div class="card"><% if (note) { %><div class="alert ok-alert" role="status"><%= note %></div><% } %>
+<h2>All reservations (<%= rows.length %>)</h2>
+<% if (!rows.length) { %><p class="mute">No reservations yet.</p><% } else { %>
+<div class="scroll"><table><thead><tr><th>ID</th><th>Student</th><th>Book</th><th>Pickup</th><th>Status</th><th></th></tr></thead><tbody>
+<% rows.forEach(r => { %><tr><td><a href="/reservations/<%= r.id %>">RS-<%= String(r.id).padStart(4, '0') %></a></td><td><%= r.name %> (<%= r.studentId %>)</td><td><%= r.book.title %></td><td><%= r.pickupDate %></td><td><%= r.status %></td>
+<td><% if (r.status === 'active') { %><form method="POST" action="/reservations/<%= r.id %>/cancel"><button class="x">Cancel</button></form><% } %></td></tr><% }) %>
+</tbody></table></div><% } %></div>
+<%- include('partials/footer') %>

@@ -1,0 +1,17 @@
+<%- include('partials/header', { title: 'Books' }) %>
+<div class="card">
+  <form method="GET" action="/" class="search" novalidate>
+    <input type="text" name="q" value="<%= q %>" placeholder="Search title or author" aria-label="Search">
+    <select name="genre" aria-label="Genre"><option value="">All genres</option>
+      <% genres.forEach(g => { %><option <%= g === genre ? 'selected' : '' %>><%= g %></option><% }) %></select>
+    <button class="btn sm" type="submit">Search</button>
+  </form>
+  <% Object.values(errors).forEach(e => { %><div class="alert err-box" role="alert"><%= e.msg %></div><% }) %>
+  <% if (!books.length) { %><p class="mute">No books match your search.</p><% } else { %>
+  <div class="scroll"><table><thead><tr><th>Title</th><th>Author</th><th>Genre</th><th>Available</th><th></th></tr></thead><tbody>
+  <% books.forEach(b => { %><tr><td><b><%= b.title %></b></td><td><%= b.author %></td><td><%= b.genre %></td>
+    <td><span class="pill <%= b.available ? '' : 'out' %>"><%= b.available %> / <%= b.copies %></span></td>
+    <td><% if (b.available) { %><a class="btn sm" href="/reserve?book=<%= b.id %>">Reserve</a><% } else { %><span class="mute">Unavailable</span><% } %></td></tr>
+  <% }) %></tbody></table></div><% } %>
+</div>
+<%- include('partials/footer') %>

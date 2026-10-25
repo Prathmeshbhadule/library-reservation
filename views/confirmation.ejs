@@ -1,0 +1,9 @@
+<%- include('partials/header', { title: 'Reservation confirmed' }) %>
+<div class="card"><div class="alert ok-alert" role="status"><b>Reservation successful.</b> Your details were validated and saved.</div>
+<h2><%= r.name %>, your book is reserved</h2>
+<table><tr><th>Reservation ID</th><td>RS-<%= String(r.id).padStart(4, '0') %></td></tr>
+<tr><th>Book</th><td><%= book.title %> – <%= book.author %></td></tr>
+<tr><th>Pickup date</th><td><%= r.pickupDate %></td></tr><tr><th>Borrow period</th><td><%= r.days %> day<%= r.days > 1 ? 's' : '' %></td></tr>
+<tr><th>Student ID</th><td><%= r.studentId %></td></tr><tr><th>Status</th><td><%= r.status %></td></tr></table>
+<p><a class="btn sm" href="/">Browse books</a> <a class="btn sm ghost" href="/reservations">All reservations</a></p></div>
+<%- include('partials/footer') %>
